@@ -2,6 +2,8 @@
 
 #include <functional>
 #include <string>
+#include <exception>
+#include <../lib/csv/csv.h>
 
 // Data for a single movie
 struct Movie {
@@ -12,6 +14,18 @@ struct Movie {
 // An in-memory database of movies. Supports linked-list style operations
 // and a transactional cursor.
 class MovieDatabase {
+    struct Node {                            
+        Movie elem;                                
+        Node* prev;                           
+        Node* next;                           
+    };
+    Node* header = new Node;
+    Node* trailer = new Node;
+    int count = 0;
+    bool transaction = false;
+    Node* cursor = nullptr;
+    void insert(Movie e, Node* node);
+    void del(Node* node);
 public:
     // Constructs a new movie database with no entries.
     MovieDatabase();
